@@ -20,17 +20,15 @@ app.post("/", function(req, res) {
   const apellido = (req.body.apellido);
 
   const data = {
-    members:[
-      {
-        email_address:email,
-        status: "subscribed",
-        merge_fields : {
-          FNAME:nombre,
-          LNAME:apellido,
-        }
-
+    members: [{
+      email_address: email,
+      status: "subscribed",
+      merge_fields: {
+        FNAME: nombre,
+        LNAME: apellido,
       }
-    ]
+
+    }]
   }
   const jsonData = JSON.stringify(data);
 
@@ -38,13 +36,19 @@ app.post("/", function(req, res) {
   const options = {
 
     method: 'POST',
-    auth: "pepe:2afc401f8076e234cd8cc122ef9c2629-us7"
+    auth: "pepe:25d84f0b8b6e112545423ef53a49fd24-us7"
   }
 
-  const request = https.request(url, options, function(res) {
-    console.log(res.statusCode);
-    res.on("data", function (data){
+  const request = https.request(url, options, function(response) {
+    console.log(response.statusCode);
+    response.on("data", function(data) {
       console.log(JSON.parse(data));
+
+      if (response.statusCode === 200){
+        res.sendFile(__dirname+"/success.html")
+      } else{
+        res.sendFile(__dirname+"/failure.html")
+      }
     })
   })
 
@@ -57,6 +61,12 @@ app.post("/", function(req, res) {
 
 })
 
+app.post("/success", function(req, res){
+  res.redirect("/");
+})
+app.post("/failure", function(req, res){
+  res.redirect("/");
+})
 
 
 
